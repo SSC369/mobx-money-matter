@@ -12,8 +12,8 @@ import {
   TRANSACTIONS_OFFSET,
 } from "../constants";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
-import userStore from "../store/userStore";
-import transactionStore from "../store/transactionStore";
+import userStore from "../store/UserStore";
+import transactionStore from "../store/TransactionStore";
 
 export const TransactionContext = createContext();
 
@@ -23,7 +23,7 @@ export const TransactionContextProvider = ({ children }) => {
     useState(false);
   const [showAddTransactionModal, setShowAddTransactionModal] = useState(false);
   const [deleteTransactionId, setDeleteTransactionId] = useState(null);
-  const { userId } = userStore.UserContextData;
+  const { userId } = userStore.userContextData;
   if (!userId) {
     return <></>;
   }

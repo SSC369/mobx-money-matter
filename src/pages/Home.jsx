@@ -7,12 +7,12 @@ import Header from "../components/Header";
 import { TransactionContext } from "../context/transactionContext";
 import AddTransactionModal from "../components/AddTransactionModal";
 import themeStore from "../store/themeStore";
-import userStore from "../store/userStore";
+import userStore from "../store/UserStore";
 
 const Home = observer(() => {
   const { showAddTransactionModal, setShowAddTransactionModal } =
     useContext(TransactionContext);
-  // console.log(userStore.UserContextData);
+  // console.log(userStore.userContextData);
 
   const renderAddTransactionModal = () => {
     if (showAddTransactionModal) {

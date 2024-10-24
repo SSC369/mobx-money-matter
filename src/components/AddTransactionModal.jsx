@@ -20,8 +20,8 @@ import InputContainer, {
   SelectInput,
 } from "./InputComponents";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
-import userStore from "../store/userStore";
-import transactionStore from "../store/transactionStore";
+import userStore from "../store/UserStore";
+import transactionStore from "../store/TransactionStore";
 
 const AddTransactionModal = observer(({ onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -33,7 +33,7 @@ const AddTransactionModal = observer(({ onClose }) => {
     date: "",
   });
   const [addLoading, setAddLoading] = useState(false);
-  const { userId } = userStore.UserContextData;
+  const { userId } = userStore.userContextData;
 
   useEffect(() => {
     setIsVisible(true); // Trigger the animation when modal is mounted

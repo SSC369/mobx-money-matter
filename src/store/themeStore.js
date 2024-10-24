@@ -1,15 +1,9 @@
 import { action, autorun, makeAutoObservable, reaction } from "mobx";
 
-class Theme {
+class ThemeStore {
   theme = localStorage.getItem("theme") || "light";
   constructor() {
-    makeAutoObservable(
-      this,
-      {
-        changeTheme: action,
-      },
-      { autoBind: true }
-    );
+    makeAutoObservable(this, {}, { autoBind: true });
     reaction(
       () => this.theme.slice(),
       (theme) => {
@@ -27,5 +21,4 @@ class Theme {
   }
 }
 
-const themeStore = new Theme();
-export default themeStore;
+export default new ThemeStore();

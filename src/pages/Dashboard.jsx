@@ -13,8 +13,8 @@ import ErrorPage from "../components/ErrorPage";
 import TotalDebitCredit from "./TotalDebitCredit";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 import { observer } from "mobx-react-lite";
-import userStore from "../store/userStore";
-import transactionStore from "../store/transactionStore";
+import userStore from "../store/UserStore";
+import transactionStore from "../store/TransactionStore";
 
 const Dashboard = observer(() => {
   const {
@@ -28,7 +28,7 @@ const Dashboard = observer(() => {
   const [editTransactionId, setEditTransactionId] = useState(null);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
-  const { userId } = userStore.UserContextData;
+  const { userId } = userStore.userContextData;
   const latestTransactions = transactionStore.getLatestTransactions;
   const transactions = transactionStore.getTransactions;
   const handleTransactionDeleteSuccess = (data) => {

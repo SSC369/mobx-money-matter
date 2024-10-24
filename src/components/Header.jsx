@@ -8,7 +8,7 @@ import TransactionOption from "./TransactionOption";
 import { DASHBOARD_ROUTE, TAB_OPTIONS, TRANSACTION_ROUTE } from "../constants";
 import { TransactionContext } from "../context/transactionContext";
 import ToggleButton from "./ToggleButton";
-import userStore from "../store/userStore";
+import userStore from "../store/UserStore";
 
 const Header = observer(() => {
   const path = window.location.pathname;

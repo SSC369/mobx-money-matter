@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { NUMBER_OF_TRANSACTIONS } from "../constants";
 
-class Transaction {
+class TransactionStore {
   totalDebitCreditTransactionsData = [];
   transactions = [];
 
@@ -21,22 +21,36 @@ class Transaction {
     this.totalDebitCreditTransactionsData = data;
   }
 
-  addTransaction(transaction) {
-    this.transactions = [...this.transactions, transaction];
-    console.log(this.totalDebitCreditTransactionsData);
+  AddAmountTotalDebitCreditData(transaction, prev) {
+    this.totalDebitCreditTransactionsData =
+      this.totalDebitCreditTransactionsData.map((data) => {
+        if (data.type === transaction.type) {
+          return {
+            type: transaction.type,
+            sum: data.sum + transaction.amount - prev,
+          };
+        }
+        return data;
+      });
+  }
+
+  removeAmountTotalDebitCreditData(transaction) {
     this.totalDebitCreditTransactionsData =
       this.totalDebitCreditTransactionsData.map((data) => {
         if (data.type === transaction.type) {
           console.log(transaction);
           return {
             type: transaction.type,
-            sum: data.sum + transaction.amount,
+            sum: data.sum - transaction.amount,
           };
         }
         return data;
       });
+  }
 
-    console.log(this.totalDebitCreditTransactionsData);
+  addTransaction(transaction) {
+    this.transactions = [...this.transactions, transaction];
+    this.AddAmountTotalDebitCreditData(transaction, 0);
   }
 
   deleteTransaction(data) {
@@ -45,20 +59,11 @@ class Transaction {
     this.transactions = this.transactions.filter(
       (transaction) => transaction.id !== id
     );
-    this.totalDebitCreditTransactionsData =
-      this.totalDebitCreditTransactionsData.map((data) => {
-        if (data.type === transaction.type) {
-          return {
-            type: data.type,
-            sum: data.sum + transaction.amount,
-          };
-        }
-        return data;
-      });
+    this.removeAmountTotalDebitCreditData(transaction);
   }
 
   updateTransaction(transaction) {
-    const { id, type } = transaction;
+    const { id } = transaction;
     let prevTransactionAmount;
     let filteredTransactions = this.transactions.filter((data) => {
       const { amount } = data;
@@ -69,16 +74,7 @@ class Transaction {
     });
     filteredTransactions = [...filteredTransactions, transaction];
     this.transactions = filteredTransactions;
-    this.totalDebitCreditTransactionsData =
-      this.totalDebitCreditTransactionsData.map((data) => {
-        if (data.type === type) {
-          return {
-            type,
-            sum: data.sum + transaction.amount - prevTransactionAmount,
-          };
-        }
-        return data;
-      });
+    this.AddAmountTotalDebitCreditData(transaction, prevTransactionAmount);
   }
 
   get getLatestTransactions() {
@@ -91,5 +87,4 @@ class Transaction {
   }
 }
 
-const transactionStore = new Transaction();
-export default transactionStore;
+export default new TransactionStore();

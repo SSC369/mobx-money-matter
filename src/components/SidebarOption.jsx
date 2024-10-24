@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 
 import { SIDEBAR_OPTIONS } from "../constants";
 import { observer } from "mobx-react-lite";
-import userStore from "../store/userStore";
+import userStore from "../store/UserStore";
 
 const SidebarOption = observer(({ option }) => {
-  const { isAdmin } = userStore.UserContextData;
+  const { isAdmin } = userStore.userContextData;
   const navigate = useNavigate();
   const path = window.location.pathname;
 

@@ -19,8 +19,8 @@ import ErrorPage from "../components/ErrorPage";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 import TransactionOption from "../components/TransactionOption";
 import { observer } from "mobx-react-lite";
-import userStore from "../store/userStore";
-import transactionStore from "../store/transactionStore";
+import userStore from "../store/UserStore";
+import transactionStore from "../store/TransactionStore";
 
 const Transactions = observer(() => {
   const [showAlertModal, setShowAlertModal] = useState(false);
@@ -37,7 +37,7 @@ const Transactions = observer(() => {
 
   const transactions = transactionStore.getTransactions;
   const [editTransactionId, setEditTransactionId] = useState(null);
-  const { userId } = userStore.UserContextData;
+  const { userId } = userStore.userContextData;
   const handleTransactionDeleteSuccess = (data) => {
     toast.success("Transaction deleted");
     const { delete_transactions_by_pk } = data;

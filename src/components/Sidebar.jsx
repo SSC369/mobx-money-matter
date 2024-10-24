@@ -20,13 +20,13 @@ import { removeDataFromLocalStorage } from "../utils/localStorageUtils";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 import { sidebarContainer } from "../styles";
 import { observer } from "mobx-react-lite";
-import userStore from "../store/userStore";
+import userStore from "../store/UserStore";
 
 const Sidebar = observer(() => {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [userData, setUserData] = useState(null);
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
-  const { userId } = userStore.UserContextData;
+  const { userId } = userStore.userContextData;
 
   const navigate = useNavigate();
 

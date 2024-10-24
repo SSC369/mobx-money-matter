@@ -17,8 +17,8 @@ import {
 } from "../constants";
 import { InputElement, InputLabel, SelectInput } from "./InputComponents";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
-import userStore from "../store/userStore";
-import transactionStore from "../store/transactionStore";
+import userStore from "../store/UserStore";
+import transactionStore from "../store/TransactionStore";
 
 const EditTransactionModal = observer(({ onClose, data }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -33,7 +33,7 @@ const EditTransactionModal = observer(({ onClose, data }) => {
     date: dayjs(new Date(date)).format(INPUT_DATE_FORMAT),
   });
   const [isEditLoading, setIsEditLoading] = useState(false);
-  const { userId } = userStore.UserContextData;
+  const { userId } = userStore.userContextData;
 
   useEffect(() => {
     setIsVisible(true); // Trigger the animation when modal is mounted

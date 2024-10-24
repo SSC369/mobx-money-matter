@@ -5,7 +5,7 @@ import debitImage from "../assets/debit.png";
 import Loader from "../components/Loader";
 import { TRANSACTION_TYPES_OBJECT } from "../constants";
 import { observer } from "mobx-react-lite";
-import transactionStore from "../store/transactionStore";
+import transactionStore from "../store/TransactionStore";
 
 const TotalDebitCredit = observer(() => {
   const {
