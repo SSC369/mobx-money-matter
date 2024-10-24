@@ -5,10 +5,10 @@ import debitImage from "../assets/debit.png";
 import Loader from "../components/Loader";
 import { TRANSACTION_TYPES_OBJECT } from "../constants";
 import { observer } from "mobx-react-lite";
+import transactionStore from "../store/transactionStore";
 
 const TotalDebitCredit = observer(() => {
   const {
-    totalDebitCreditTransactionsData,
     isTotalDebitCreditTransactionsLoading,
     totalDebitCreditTransactionsError,
   } = useContext(TransactionContext);
@@ -16,6 +16,9 @@ const TotalDebitCredit = observer(() => {
   if (totalDebitCreditTransactionsError) {
     return <h1>Something went wrong !!!</h1>;
   }
+
+  const totalDebitCreditTransactionsData =
+    transactionStore.totalDebitCreditTransactionsData;
 
   const renderImage = (isTypeCredit) => {
     if (isTypeCredit) {

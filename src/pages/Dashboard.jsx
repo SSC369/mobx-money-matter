@@ -14,31 +14,27 @@ import TotalDebitCredit from "./TotalDebitCredit";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 import { observer } from "mobx-react-lite";
 import userStore from "../store/userStore";
+import transactionStore from "../store/transactionStore";
 
 const Dashboard = observer(() => {
   const {
-    latestTransactions,
     isTransactionsLoading,
-    transactionsMutate,
-    totalDebitCreditTransactionsMutate,
     deleteTransactionId,
     setDeleteTransactionId,
     showEditTransactionModal,
     setShowEditTransactionModal,
     transactionsError,
-    transactions,
   } = useContext(TransactionContext);
   const [editTransactionId, setEditTransactionId] = useState(null);
-
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-
   const [showAlertModal, setShowAlertModal] = useState(false);
   const { userId } = userStore.UserContextData;
-
-  const handleTransactionDeleteSuccess = () => {
+  const latestTransactions = transactionStore.getLatestTransactions;
+  const transactions = transactionStore.getTransactions;
+  const handleTransactionDeleteSuccess = (data) => {
     toast.success("Transaction deleted");
-    transactionsMutate();
-    totalDebitCreditTransactionsMutate();
+    const { delete_transactions_by_pk } = data;
+    transactionStore.deleteTransaction(delete_transactions_by_pk);
   };
 
   const handleTransactionDelete = async () => {
@@ -50,7 +46,7 @@ const Dashboard = observer(() => {
       });
 
       if (res.status === SUCCESS_OK) {
-        handleTransactionDeleteSuccess();
+        handleTransactionDeleteSuccess(res.data);
       } else {
         toast.error("Responded with status" + res.status);
       }

@@ -33,9 +33,9 @@ const TransactionItem = observer(
     };
 
     const renderButtons = () => {
-      if (showMenu) {
+      if (showMenu || window.innerWidth >= 768) {
         return (
-          <div className="flex items-center gap-2 absolute right-4 top-7 shadow-md rounded-lg p-2 md:static dark:bg-slate-600 bg-slate-100">
+          <div className="flex items-center gap-2 absolute right-4 top-7 shadow-md md:shadow-none md:p-0  rounded-lg p-2 md:static dark:bg-slate-600 bg-slate-100 md:dark:bg-transparent md:bg-transparent">
             <button onClick={handleEditClick}>
               <MdOutlineModeEdit className="text-xl text-blue-400" />
             </button>

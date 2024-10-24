@@ -20,16 +20,14 @@ import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 import TransactionOption from "../components/TransactionOption";
 import { observer } from "mobx-react-lite";
 import userStore from "../store/userStore";
+import transactionStore from "../store/transactionStore";
 
 const Transactions = observer(() => {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const {
     activeTab,
-    transactions,
     isTransactionsLoading,
-    transactionsMutate,
-    totalDebitCreditTransactionsMutate,
     deleteTransactionId,
     setDeleteTransactionId,
     showEditTransactionModal,
@@ -37,14 +35,13 @@ const Transactions = observer(() => {
     transactionsError,
   } = useContext(TransactionContext);
 
+  const transactions = transactionStore.getTransactions;
   const [editTransactionId, setEditTransactionId] = useState(null);
-
   const { userId } = userStore.UserContextData;
-
-  const handleTransactionDeleteSuccess = () => {
+  const handleTransactionDeleteSuccess = (data) => {
     toast.success("Transaction deleted");
-    transactionsMutate();
-    totalDebitCreditTransactionsMutate();
+    const { delete_transactions_by_pk } = data;
+    transactionStore.deleteTransaction(delete_transactions_by_pk);
   };
 
   const handleTransactionDelete = async () => {
@@ -56,7 +53,7 @@ const Transactions = observer(() => {
       });
 
       if (res.status === SUCCESS_OK) {
-        handleTransactionDeleteSuccess();
+        handleTransactionDeleteSuccess(res.data);
       }
     } catch (error) {
       toast.error(error.message);

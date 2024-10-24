@@ -21,6 +21,7 @@ import InputContainer, {
 } from "./InputComponents";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 import userStore from "../store/userStore";
+import transactionStore from "../store/transactionStore";
 
 const AddTransactionModal = observer(({ onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -32,8 +33,6 @@ const AddTransactionModal = observer(({ onClose }) => {
     date: "",
   });
   const [addLoading, setAddLoading] = useState(false);
-  const { totalDebitCreditTransactionsMutate, transactionsMutate } =
-    useContext(TransactionContext);
   const { userId } = userStore.UserContextData;
 
   useEffect(() => {
@@ -68,10 +67,10 @@ const AddTransactionModal = observer(({ onClose }) => {
     return true;
   };
 
-  const handleSuccess = () => {
+  const handleSuccess = (data) => {
     toast.success("Transaction Added");
-    transactionsMutate();
-    totalDebitCreditTransactionsMutate();
+    const { insert_transactions_one } = data;
+    transactionStore.addTransaction(insert_transactions_one);
     setFormData({
       name: "",
       type: "",
@@ -106,7 +105,7 @@ const AddTransactionModal = observer(({ onClose }) => {
         );
 
         if (res.status === SUCCESS_OK) {
-          handleSuccess();
+          handleSuccess(res.data);
         }
       }
     } catch (error) {

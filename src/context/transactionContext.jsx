@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 
@@ -7,13 +7,13 @@ import {
   API_ALL_TRANSACTIONS,
   API_TOTAL_DEBIT_CREDIT_TRANSACTIONS,
   INITIAL_ACTIVE_TAB,
-  NUMBER_OF_TRANSACTIONS,
   SUCCESS_OK,
   TRANSACTIONS_LIMIT,
   TRANSACTIONS_OFFSET,
 } from "../constants";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 import userStore from "../store/userStore";
+import transactionStore from "../store/transactionStore";
 
 export const TransactionContext = createContext();
 
@@ -23,13 +23,11 @@ export const TransactionContextProvider = ({ children }) => {
     useState(false);
   const [showAddTransactionModal, setShowAddTransactionModal] = useState(false);
   const [deleteTransactionId, setDeleteTransactionId] = useState(null);
-
   const { userId } = userStore.UserContextData;
-
   if (!userId) {
     return <></>;
   }
-  //No magic numbers
+
   const transactionsFetcher = async (url) => {
     try {
       const res = await axios({
@@ -57,9 +55,14 @@ export const TransactionContextProvider = ({ children }) => {
   const {
     data: transactions,
     isLoading: isTransactionsLoading,
-    mutate: transactionsMutate,
     error: transactionsError,
   } = useSWR(API_ALL_TRANSACTIONS, transactionsFetcher);
+
+  useEffect(() => {
+    if (!isTransactionsLoading) {
+      transactionStore.setTransactions(transactions);
+    }
+  }, [isTransactionsLoading]);
 
   const totalDebitCreditTransactionsFetcher = async (url) => {
     try {
@@ -83,36 +86,29 @@ export const TransactionContextProvider = ({ children }) => {
   const {
     data: totalDebitCreditTransactionsData,
     isLoading: isTotalDebitCreditTransactionsLoading,
-    mutate: totalDebitCreditTransactionsMutate,
     error: totalDebitCreditTransactionsError,
   } = useSWR(
     API_TOTAL_DEBIT_CREDIT_TRANSACTIONS,
     totalDebitCreditTransactionsFetcher
   );
 
-  const getLatestTransactions = () => {
-    let latestTransactions = [];
-    if (!isTransactionsLoading) {
-      latestTransactions = transactions
-        ?.sort((first, second) => new Date(second.date) - new Date(first.date))
-        .slice(0, NUMBER_OF_TRANSACTIONS);
+  useEffect(() => {
+    if (!isTotalDebitCreditTransactionsLoading) {
+      transactionStore.setTotalDebitCreditTransactionsData(
+        totalDebitCreditTransactionsData
+      );
     }
-
-    return latestTransactions;
-  };
+  }, [isTotalDebitCreditTransactionsLoading]);
 
   return (
     <TransactionContext.Provider
       value={{
         activeTab,
         setActiveTab,
-        latestTransactions: getLatestTransactions(),
         isTransactionsLoading,
         transactions,
-        transactionsMutate,
         totalDebitCreditTransactionsData,
         isTotalDebitCreditTransactionsLoading,
-        totalDebitCreditTransactionsMutate,
         showEditTransactionModal,
         setShowEditTransactionModal,
         deleteTransactionId,

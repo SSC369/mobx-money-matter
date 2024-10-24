@@ -6,7 +6,6 @@ import { FiChevronDown } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { observer } from "mobx-react-lite";
 
-import { TransactionContext } from "../context/transactionContext";
 import LoadingButton from "./LoadingButton";
 import {
   ACTION_TYPES,
@@ -16,13 +15,10 @@ import {
   SUCCESS_OK,
   TRANSACTION_TYPES,
 } from "../constants";
-import InputContainer, {
-  InputElement,
-  InputLabel,
-  SelectInput,
-} from "./InputComponents";
+import { InputElement, InputLabel, SelectInput } from "./InputComponents";
 import { TRANSACTION_HEADERS } from "../utils/headerUtils";
 import userStore from "../store/userStore";
+import transactionStore from "../store/transactionStore";
 
 const EditTransactionModal = observer(({ onClose, data }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -37,8 +33,6 @@ const EditTransactionModal = observer(({ onClose, data }) => {
     date: dayjs(new Date(date)).format(INPUT_DATE_FORMAT),
   });
   const [isEditLoading, setIsEditLoading] = useState(false);
-  const { transactionsMutate, totalDebitCreditTransactionsMutate } =
-    useContext(TransactionContext);
   const { userId } = userStore.UserContextData;
 
   useEffect(() => {
@@ -71,10 +65,10 @@ const EditTransactionModal = observer(({ onClose, data }) => {
     return true;
   };
 
-  const handleEditSuccess = () => {
+  const handleEditSuccess = (data) => {
     toast.success("Transaction Updated");
-    transactionsMutate();
-    totalDebitCreditTransactionsMutate();
+    const { update_transactions_by_pk } = data;
+    transactionStore.updateTransaction(update_transactions_by_pk);
     setFormData({
       name: "",
       type: "",
@@ -108,7 +102,7 @@ const EditTransactionModal = observer(({ onClose, data }) => {
         );
 
         if (res.status === SUCCESS_OK) {
-          handleEditSuccess();
+          handleEditSuccess(res.data);
         } else {
           toast.error("Response is " + res.status);
         }
