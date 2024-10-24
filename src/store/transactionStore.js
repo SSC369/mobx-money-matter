@@ -12,7 +12,7 @@ class TransactionStore {
     return this.transactions;
   }
   get gettotalDebitCreditTransactionsData() {
-    return this.gettotalDebitCreditTransactionsData;
+    return this.totalDebitCreditTransactionsData;
   }
   setTransactions(data) {
     this.transactions = data;
