@@ -14,7 +14,6 @@ import {
 } from "./constants";
 
 import { TransactionContextProvider } from "./context/transactionContext";
-import { ThemeContextProvider } from "./context/themeContext";
 
 const App = () => {
   return (
@@ -26,9 +25,7 @@ const App = () => {
           path={HOME_ROUTE}
           element={
             <TransactionContextProvider>
-              <ThemeContextProvider>
-                <Home />
-              </ThemeContextProvider>
+              <Home />
             </TransactionContextProvider>
           }
         >

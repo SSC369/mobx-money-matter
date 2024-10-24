@@ -22,5 +22,7 @@ class UserStore {
     this.showMenu = !this.showMenu;
   }
 }
+//store methods, variables
+//components props
 
 export default new UserStore();
